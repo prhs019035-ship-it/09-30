@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hygge Life | 溫感微光・日常隨行水壺</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Sans TC & Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: {
+                            50: '#FAF8F5',
+                            100: '#F5F0E8',
+                            200: '#EADFCF',
+                            800: '#4A4238',
+                        },
+                        warm: {
+                            terracotta: '#D98A6C',
+                            terracottaHover: '#C6775A',
+                            sage: '#8A9A86',
+                            oat: '#EBE3D5',
+                            sand: '#F3EFEA',
+                            charcoal: '#332E2B',
+                            amber: '#E0A96D'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-slow': 'float 9s ease-in-out infinite',
+                        'pulse-gentle': 'pulseGentle 4s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-12px) rotate(1.5deg)' },
+                        },
+                        pulseGentle: {
+                            '0%, 100%': { opacity: '0.8', transform: 'scale(1)' },
+                            '50%': { opacity: '0.4', transform: 'scale(1.05)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(28px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-stagger {
+            opacity: 0;
+            animation: slideUpFade 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .delay-100 { animation-delay: 150ms; }
+        .delay-200 { animation-delay: 300ms; }
+        .delay-300 { animation-delay: 450ms; }
+        .delay-400 { animation-delay: 600ms; }
+        .delay-500 { animation-delay: 750ms; }
+
+        .btn-float {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-float:hover {
+            transform: translateY(-2px);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(217, 138, 108, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-cream-50 font-sans text-warm-charcoal antialiased selection:bg-warm-terracotta selection:text-white">
+
+    <header id="main-nav" class="fixed top-0 left-0 right-0 z-40 bg-cream-50/90 backdrop-blur-md transition-all duration-300 border-b border-warm-terracotta/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#" class="flex items-center space-x-2">
+                <div class="w-10 h-10 rounded-full bg-warm-terracotta flex items-center justify-center text-white font-bold text-xl shadow-sm">H</div>
+                <span class="font-serif text-2xl font-bold tracking-tight text-warm-charcoal">Hygge<span class="text-warm-terracotta">.</span></span>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-warm-charcoal/80">
+                <a href="#hero" class="hover:text-warm-terracotta transition-colors">首頁總覽</a>
+                <a href="#story" class="hover:text-warm-terracotta transition-colors">品牌故事</a>
+                <a href="#features" class="hover:text-warm-terracotta transition-colors">產品細節</a>
+                <a href="#scenarios" class="hover:text-warm-terracotta transition-colors">日常情境</a>
+                <a href="#reviews" class="hover:text-warm-terracotta transition-colors">顧客好評</a>
+            </nav>
+
+            <!-- Right Action Icons & Cart Button -->
+            <div class="flex items-center space-x-4">
+                <button onclick="openCartModal()" class="relative p-2 rounded-full hover:bg-cream-200/50 transition-colors text-warm-charcoal" aria-label="購物車">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                    <span id="cart-badge" class="absolute -top-1 -right-1 w-5 h-5 bg-warm-terracotta text-white rounded-full text-xs flex items-center justify-center font-bold">0</span>
+                </button>
+                <a href="#purchase" class="hidden sm:inline-block px-5 py-2.5 rounded-full bg-warm-terracotta text-white font-medium text-sm hover:bg-warm-terracottaHover transition-colors shadow-sm">
+                    立即購買
+                </a>
+                <!-- Mobile Menu Toggle Button -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 text-warm-charcoal focus:outline-none" aria-label="選單">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-cream-200 bg-cream-50 px-4 pt-3 pb-6 space-y-3">
+            <a href="#hero" class="block px-3 py-2 rounded-lg text-base font-medium text-warm-charcoal hover:bg-cream-200/50">首頁總覽</a>
+            <a href="#story" class="block px-3 py-2 rounded-lg text-base font-medium text-warm-charcoal hover:bg-cream-200/50">品牌故事</a>
+            <a href="#features" class="block px-3 py-2 rounded-lg text-base font-medium text-warm-charcoal hover:bg-cream-200/50">產品細節</a>
+            <a href="#scenarios" class="block px-3 py-2 rounded-lg text-base font-medium text-warm-charcoal hover:bg-cream-200/50">日常情境</a>
+            <a href="#reviews" class="block px-3 py-2 rounded-lg text-base font-medium text-warm-charcoal hover:bg-cream-200/50">顧客好評</a>
+            <div class="pt-2">
+                <a href="#purchase" class="block w-full text-center py-3 rounded-full bg-warm-terracotta text-white font-medium">
+                    立即購買
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section id="hero" class="relative min-h-screen pt-20 flex items-center justify-center overflow-hidden bg-gradient-to-b from-cream-100 via-cream-50 to-cream-100">
+        <!-- Parallax Background Elements -->
+        <div class="absolute inset-0 pointer-events-none overflow-hidden">
+            <div class="parallax-layer absolute -top-20 -left-20 w-96 h-96 bg-warm-terracotta/10 rounded-full filter blur-3xl animate-pulse-gentle" data-speed="0.2"></div>
+            <div class="parallax-layer absolute top-1/2 -right-20 w-[30rem] h-[30rem] bg-warm-amber/15 rounded-full filter blur-3xl animate-pulse-gentle" style="animation-delay: 2s;" data-speed="-0.15"></div>
+            <div class="parallax-layer absolute -bottom-20 left-1/3 w-80 h-80 bg-warm-sage/15 rounded-full filter blur-3xl" data-speed="0.1"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-12 lg:py-0 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center min-h-[calc(100vh-5rem)]">
+                
+                <!-- Hero Left Text Content -->
+                <div class="lg:col-span-6 space-y-6 text-center lg:text-left pt-6 lg:pt-0">
+                    <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-warm-terracotta/20 shadow-sm text-xs font-medium text-warm-terracotta animate-stagger">
+                        <span class="w-2 h-2 rounded-full bg-warm-terracotta animate-ping"></span>
+                        <span>2026 秋冬暖心新品上市・莫蘭迪溫感系列</span>
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold tracking-tight text-warm-charcoal leading-[1.15] animate-stagger delay-100">
+                        手心的溫度，<br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-warm-terracotta via-warm-amber to-warm-terracotta">點亮每個日常細節。</span>
+                    </h1>
+
+                    <p class="text-base sm:text-lg text-warm-charcoal/70 max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal animate-stagger delay-200">
+                        專為忙碌生活的你所設計。採用雙層真空陶瓷塗層與微光霧感工藝，24小時溫控保溫，讓每一口啜飲，都是對自我的溫柔撫慰。
+                    </p>
+
+                    <!-- Dual CTA Buttons -->
+                    <div class="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 animate-stagger delay-300">
+                        <a href="#purchase" class="w-full sm:w-auto px-8 py-4 rounded-full bg-warm-terracotta text-white font-medium hover:bg-warm-terracottaHover btn-float shadow-lg flex items-center justify-center space-x-2 group">
+                            <span>立即購買</span>
+                            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </a>
+                        <a href="#story" class="w-full sm:w-auto px-8 py-4 rounded-full bg-white/80 text-warm-charcoal border border-warm-charcoal/15 font-medium hover:bg-white hover:border-warm-terracotta btn-float shadow-sm flex items-center justify-center space-x-2">
+                            <svg class="w-5 h-5 text-warm-terracotta" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>了解更多故事</span>
+                        </a>
+                    </div>
+
+                    <!-- Highlight Metrics -->
+                    <div class="pt-8 grid grid-cols-3 gap-4 border-t border-warm-charcoal/10 max-w-lg mx-auto lg:mx-0 animate-stagger delay-400">
+                        <div>
+                            <p class="font-serif text-2xl lg:text-3xl font-bold text-warm-charcoal">24h</p>
+                            <p class="text-xs text-warm-charcoal/60 mt-0.5">極致長效保溫保冷</p>
+                        </div>
+                        <div>
+                            <p class="font-serif text-2xl lg:text-3xl font-bold text-warm-charcoal">316</p>
+                            <p class="text-xs text-warm-charcoal/60 mt-0.5">醫療級不鏽鋼內膽</p>
+                        </div>
+                        <div>
+                            <p class="font-serif text-2xl lg:text-3xl font-bold text-warm-charcoal">0%</p>
+                            <p class="text-xs text-warm-charcoal/60 mt-0.5">無雙酚 A 放心飲用</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Right Interactive Bottle Visual -->
+                <div class="lg:col-span-6 relative flex justify-center items-center">
+                    <div class="relative w-full max-w-md aspect-square flex items-center justify-center">
+                        <!-- Decorative Backdrop Circle -->
+                        <div class="absolute w-72 h-72 sm:w-80 sm:h-80 rounded-full bg-gradient-to-tr from-warm-terracotta/20 to-warm-amber/30 blur-xl animate-pulse-gentle"></div>
+                        
+                        <!-- Floating SVG Water Bottle Visual -->
+                        <div class="relative z-10 animate-float transition-all duration-500 transform hover:scale-105" id="hero-bottle-container">
+                            <svg width="240" height="420" viewBox="0 0 200 360" fill="none" xmlns="http://www.w3.org/2000/svg" class="drop-shadow-2xl">
+                                <!-- Cap Handle -->
+                                <path d="M70 30 C70 15, 130 15, 130 30" stroke="#3D312A" stroke-width="8" stroke-linecap="round" fill="none"/>
+                                <!-- Cap Base -->
+                                <rect x="65" y="28" width="70" height="28" rx="6" fill="#3D312A" />
+                                <rect x="70" y="52" width="60" height="8" fill="#EBE3D5" />
+                                
+                                <!-- Bottle Main Body -->
+                                <path id="hero-bottle-body" d="M50 75 C50 60, 150 60, 150 75 L155 290 C155 310, 140 325, 120 325 L80 325 C60 325, 45 310, 45 290 Z" fill="#D98A6C" class="transition-colors duration-500"/>
+                                
+                                <!-- Soft Highlight Reflection -->
+                                <path d="M60 85 C60 75, 140 75, 140 85 L142 120 C100 130, 70 110, 60 85 Z" fill="white" fill-opacity="0.2"/>
+                                <path d="M55 100 L55 280 C55 295, 65 305, 80 305" stroke="white" stroke-opacity="0.25" stroke-width="6" stroke-linecap="round"/>
+                                
+                                <!-- Brand Logo Mark on Bottle -->
+                                <text x="100" y="200" font-family="'Playfair Display', serif" font-size="14" font-weight="bold" fill="#3D312A" fill-opacity="0.4" text-anchor="middle" letter-spacing="2">HYGGE</text>
+                                <circle cx="100" cy="215" r="3" fill="#3D312A" fill-opacity="0.4"/>
+                            </svg>
+                        </div>
+
+                        <!-- Color Selector Badges Floating Near Bottle -->
+                        <div class="absolute -bottom-4 bg-white/90 backdrop-blur-md px-5 py-3 rounded-2xl shadow-lg border border-warm-terracotta/10 flex items-center space-x-3 z-20">
+                            <span class="text-xs font-medium text-warm-charcoal/70">配色切換：</span>
+                            <button onclick="changeHeroColor('#D98A6C', '赤陶暖橙')" class="w-6 h-6 rounded-full bg-[#D98A6C] ring-2 ring-offset-2 ring-warm-terracotta focus:outline-none transition-transform hover:scale-110" title="赤陶暖橙"></button>
+                            <button onclick="changeHeroColor('#8A9A86', '鼠尾草綠')" class="w-6 h-6 rounded-full bg-[#8A9A86] hover:ring-2 hover:ring-offset-2 hover:ring-warm-sage focus:outline-none transition-transform hover:scale-110" title="鼠尾草綠"></button>
+                            <button onclick="changeHeroColor('#EBE3D5', '燕麥奶白')" class="w-6 h-6 rounded-full bg-[#EBE3D5] border border-gray-300 hover:ring-2 hover:ring-offset-2 hover:ring-warm-oat focus:outline-none transition-transform hover:scale-110" title="燕麥奶白"></button>
+                            <button onclick="changeHeroColor('#3D312A', '微光炭灰')" class="w-6 h-6 rounded-full bg-[#3D312A] hover:ring-2 hover:ring-offset-2 hover:ring-warm-charcoal focus:outline-none transition-transform hover:scale-110" title="微光炭灰"></button>
+                        </div>
+
+                        <!-- Floating Warm Note Banner -->
+                        <div class="absolute -top-2 -right-2 sm:top-4 sm:right-0 glass-card px-4 py-2.5 rounded-2xl shadow-sm text-xs text-warm-charcoal flex items-center space-x-2 z-20 animate-bounce" style="animation-duration: 3s;">
+                            <span class="text-lg">☕</span>
+                            <div>
+                                <p class="font-semibold text-warm-terracotta">手感陶瓷塗層</p>
+                                <p class="text-[10px] text-warm-charcoal/60">不留異味・好清洗</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <a href="#story" class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center text-warm-charcoal/40 hover:text-warm-terracotta transition-colors">
+            <span class="text-xs font-medium tracking-wider mb-1">向下探索</span>
+            <svg class="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+        </a>
+    </section>
+
+    <section id="story" class="py-24 bg-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Story Image Grid -->
+                <div class="lg:col-span-6 order-2 lg:order-1 relative">
+                    <div class="grid grid-cols-2 gap-4 sm:gap-6">
+                        <div class="space-y-4 sm:space-y-6">
+                            <div class="rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+                                <img src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=800&q=80" alt="晨光中的咖啡水壺" class="w-full h-64 sm:h-72 object-cover" onerror="this.src='https://placehold.co/400x500/EADFCF/332E2B?text=Morning+Coffee'">
+                            </div>
+                            <div class="bg-cream-100 p-6 rounded-3xl border border-cream-200">
+                                <span class="text-warm-terracotta font-serif text-3xl font-bold">01.</span>
+                                <h4 class="font-bold text-warm-charcoal mt-2 mb-1">溫潤手感觸覺</h4>
+                                <p class="text-xs text-warm-charcoal/70 leading-relaxed">靜音磨砂質感，防滑且不冰冷，每一次握持都充滿療癒。</p>
+                            </div>
+                        </div>
+                        <div class="space-y-4 sm:space-y-6 pt-8">
+                            <div class="bg-warm-terracotta/10 p-6 rounded-3xl border border-warm-terracotta/20">
+                                <span class="text-warm-terracotta font-serif text-3xl font-bold">02.</span>
+                                <h4 class="font-bold text-warm-charcoal mt-2 mb-1">輕量隨行提把</h4>
+                                <p class="text-xs text-warm-charcoal/70 leading-relaxed">隱藏式矽膠提把，散步、通勤輕鬆帶著走。</p>
+                            </div>
+                            <div class="rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+                                <img src="https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=800&q=80" alt="溫馨居家工作桌" class="w-full h-64 sm:h-72 object-cover" onerror="this.src='https://placehold.co/400x500/8A9A86/FFFFFF?text=Cozy+Home'">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Story Text Narrative -->
+                <div class="lg:col-span-6 order-1 lg:order-2 space-y-6">
+                    <div class="inline-block px-3 py-1 rounded-full bg-warm-amber/15 text-warm-amber font-medium text-xs">
+                        品牌故事 ・ OUR STORY
+                    </div>
+                    
+                    <h2 class="text-3xl sm:text-4xl font-serif font-bold text-warm-charcoal leading-tight">
+                        在平淡的日常裡，<br>
+                        為自己留一口溫暖的甘甜。
+                    </h2>
+
+                    <p class="text-warm-charcoal/80 leading-relaxed text-base">
+                        「Hygge」源自北歐，代表著溫馨、舒適與當下的滿足感。我們相信，一個好的水壺不單只是盛裝水分的容器，更是陪伴你度過每一天、提醒你停下腳步喝口水的溫柔夥伴。
+                    </p>
+
+                    <p class="text-warm-charcoal/70 leading-relaxed text-sm">
+                        從清晨的第一杯熱檸檬水，到深夜加班時的一盞溫熱花草茶。我們精心挑選無毒環保材質，搭配洗鍊簡約的莫蘭迪色調，讓飲水成為日常中最具儀式感的小事。
+                    </p>
+
+                    <div class="pt-4 border-t border-cream-200 grid grid-cols-2 gap-6">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-8 h-8 rounded-full bg-cream-200 flex items-center justify-center text-warm-terracotta shrink-0 mt-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-sm text-warm-charcoal">環保永續理念</h5>
+                                <p class="text-xs text-warm-charcoal/60 mt-0.5">減少一次性塑膠瓶使用</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="w-8 h-8 rounded-full bg-cream-200 flex items-center justify-center text-warm-terracotta shrink-0 mt-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-sm text-warm-charcoal">精緻工藝認證</h5>
+                                <p class="text-xs text-warm-charcoal/60 mt-0.5">通過 SGS 嚴格無毒檢驗</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="py-24 bg-cream-100 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-warm-terracotta text-xs font-bold tracking-widest uppercase">Design & Crafts</span>
+                <h2 class="text-3xl sm:text-4xl font-serif font-bold text-warm-charcoal mt-2 mb-4">專屬日常的 6 大貼心設計</h2>
+                <p class="text-warm-charcoal/70 text-sm sm:text-base">每一個微小的細節調整，都是為了帶給你無與倫比的順暢飲用體驗。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-white rounded-3xl p-8 border border-cream-200/80 hover:border-warm-terracotta/40 shadow-sm hover:shadow-xl transition-all duration-300 group">
+                    <div class="w-14 h-14 rounded-2xl bg-warm-terracotta/10 text-warm-terracotta flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-warm-terracotta group-hover:text-white transition-all duration-300">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-warm-charcoal mb-3">24 小時真保溫保冷</h3>
+                    <p class="text-sm text-warm-charcoal/70 leading-relaxed">
+                        雙層高真空隔熱層，鎖住最適宜的飲用溫度。不論是冬日熱可可還是夏日冰咖啡，隨時享用。
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="bg-white rounded-3xl p-8 border border-cream-200/80 hover:border-warm-terracotta/40 shadow-sm hover:shadow-xl transition-all duration-300 group">
+                    <div class="w-14 h-14 rounded-2xl bg-warm-amber/15 text-warm-amber flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-warm-amber group-hover:text-white transition-all duration-300">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-warm-charcoal mb-3">日本醫用級 316 鋼芯</h3>
+                    <p class="text-sm text-warm-charcoal/70 leading-relaxed">
+                        耐酸鹼、抗腐蝕，可盛裝檸檬水、拿鐵或中藥。配備親水性易潔塗層，不易殘留茶垢異味。
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-white rounded-3xl p-8 border border-cream-200/80 hover:border-warm-terracotta/40 shadow-sm hover:shadow-xl transition-all duration-300 group">
+                    <div class="w-14 h-14 rounded-2xl bg-warm-sage/20 text-warm-sage flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-warm-sage group-hover:text-white transition-all duration-300">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-warm-charcoal mb-3">360° 雙重防漏鎖扣</h3>
+                    <p class="text-sm text-warm-charcoal/70 leading-relaxed">
+                        食品級矽膠密封圈，隨意放入包包或倒置都不擔心滲漏，讓你出門通勤更加從容安心。
+                    </p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="bg-white rounded-3xl p-8 border border-cream-200/80 hover:border-warm-terracotta/40 shadow-sm hover:shadow-xl transition-all duration-300 group">
+                    <div class="w-14 h-14 rounded-2xl bg-warm-terracotta/10 text-warm-terracotta flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-warm-terracotta group-hover:text-white transition-all duration-300">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-warm-charcoal mb-3">溫柔霧感磨砂塗層</h3>
+                    <p class="text-sm text-warm-charcoal/70 leading-relaxed">
+                        高質感靜電噴塗工藝，防刮耐磨不掉漆，握感溫潤柔滑，拿在手中就像一件生活藝術品。
+                    </p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="bg-white rounded-3xl p-8 border border-cream-200/80 hover:border-warm-terracotta/40 shadow-sm hover:shadow-xl transition-all duration-300 group">
+                    <div class="w-14 h-14 rounded-2xl bg-warm-amber/15 text-warm-amber flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-warm-amber group-hover:text-white transition-all duration-300">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-warm-charcoal mb-3">一鍵彈蓋與吸管雙飲</h3>
+                    <p class="text-sm text-warm-charcoal/70 leading-relaxed">
+                        單手即可輕鬆開蓋，配備直飲口與柔軟矽膠吸管，不論是開車、運動或辦公都能方便飲用。
+                    </p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="bg-white rounded-3xl p-8 border border-cream-200/80 hover:border-warm-terracotta/40 shadow-sm hover:shadow-xl transition-all duration-300 group">
+                    <div class="w-14 h-14 rounded-2xl bg-warm-sage/20 text-warm-sage flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-warm-sage group-hover:text-white transition-all duration-300">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L5.6 15.11a2 2 0 00-1.806.547M8 4h8l-1 1v2.172a2 2 0 00.586 1.414l.828.828A2 2 0 0117 10.828V12a1 1 0 01-1 1H8a1 1 0 01-1-1v-1.172a2 2 0 01.586-1.414l.828-.828A2 2 0 009 7.172V5L8 4z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-warm-charcoal mb-3">超大廣口易清洗設計</h3>
+                    <p class="text-sm text-warm-charcoal/70 leading-relaxed">
+                        6.5cm 廣口設計，輕鬆放冰塊、水果片與茶包。全組零件皆可拆卸，衛生清潔零死角。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="scenarios" class="py-24 bg-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-warm-terracotta text-xs font-bold tracking-widest uppercase">Lifestyle Moments</span>
+                <h2 class="text-3xl sm:text-4xl font-serif font-bold text-warm-charcoal mt-2">陪伴你的每一個光陰時刻</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <!-- Scenario Selector Navigation -->
+                <div class="lg:col-span-4 space-y-3">
+                    <button onclick="switchScenario('office')" id="tab-office" class="scenario-tab w-full text-left p-5 rounded-2xl border-2 transition-all duration-300 border-warm-terracotta bg-cream-50">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-bold text-warm-charcoal">01. 專注辦公時光</h4>
+                            <span class="text-xs text-warm-terracotta font-medium">Desk Companion</span>
+                        </div>
+                        <p class="text-xs text-warm-charcoal/70 mt-2">安靜無聲的軟墊底座，放桌上不磕碰。一整天隨時補充水分。</p>
+                    </button>
+
+                    <button onclick="switchScenario('outdoor')" id="tab-outdoor" class="scenario-tab w-full text-left p-5 rounded-2xl border-2 transition-all duration-300 border-transparent hover:bg-cream-50">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-bold text-warm-charcoal">02. 戶外散步踏青</h4>
+                            <span class="text-xs text-warm-charcoal/50 font-medium">Outdoor Walk</span>
+                        </div>
+                        <p class="text-xs text-warm-charcoal/70 mt-2">攜帶輕巧無負擔，柔軟隱藏提把，隨手提著走入陽光微風中。</p>
+                    </button>
+
+                    <button onclick="switchScenario('yoga')" id="tab-yoga" class="scenario-tab w-full text-left p-5 rounded-2xl border-2 transition-all duration-300 border-transparent hover:bg-cream-50">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-bold text-warm-charcoal">03. 瑜珈與靜心伸展</h4>
+                            <span class="text-xs text-warm-charcoal/50 font-medium">Wellness & Yoga</span>
+                        </div>
+                        <p class="text-xs text-warm-charcoal/70 mt-2">一鍵開蓋直飲設計，運動後快速補水，陪伴你享受呼吸韻律。</p>
+                    </button>
+                </div>
+
+                <!-- Scenario Display Image & Details Container -->
+                <div class="lg:col-span-8 relative">
+                    <div class="relative rounded-3xl overflow-hidden shadow-2xl min-h-[420px] flex items-end p-8 text-white group" id="scenario-display">
+                        <img id="scenario-img" src="https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=1200&q=80" alt="場景圖片" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" onerror="this.src='https://placehold.co/800x600/EADFCF/332E2B?text=Lifestyle+Scenario'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-warm-charcoal/90 via-warm-charcoal/30 to-transparent"></div>
+                        <div class="relative z-10 max-w-lg space-y-2">
+                            <span id="scenario-tag" class="px-3 py-1 rounded-full bg-warm-terracotta text-xs font-semibold uppercase tracking-wider">靜音質感・極簡隨行</span>
+                            <h3 id="scenario-title" class="text-2xl sm:text-3xl font-serif font-bold">辦公桌上的靈感起點</h3>
+                            <p id="scenario-desc" class="text-xs sm:text-sm text-gray-200 leading-relaxed">
+                                忙碌的工作節奏中，讓沉穩的色彩與適溫的水份，帶來一絲從容不迫的安心感。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reviews" class="py-24 bg-cream-50 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <div class="flex justify-center items-center space-x-1 text-warm-amber mb-2">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                </div>
+                <h2 class="text-3xl font-serif font-bold text-warm-charcoal">超過 12,000 位使用者的真實暖心好評</h2>
+            </div>
+
+            <!-- Reviews Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+                <div class="bg-white p-6 rounded-3xl border border-cream-200 shadow-sm relative">
+                    <p class="text-sm text-warm-charcoal/80 leading-relaxed mb-6">
+                        「顏值真的太高了！拿在手上觸感很順滑，而且保溫效果驚人，早上倒的熱茶到傍晚還是溫熱的，手提設計也很方便散步帶。」
+                    </p>
+                    <div class="flex items-center space-x-3 pt-4 border-t border-cream-100">
+                        <div class="w-10 h-10 rounded-full bg-warm-terracotta/20 text-warm-terracotta font-bold flex items-center justify-center">林</div>
+                        <div>
+                            <h5 class="text-sm font-bold text-warm-charcoal">林小姐 (品牌設計師)</h5>
+                            <span class="text-xs text-warm-charcoal/50">購買：赤陶暖橙 650ml</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl border border-cream-200 shadow-sm relative">
+                    <p class="text-sm text-warm-charcoal/80 leading-relaxed mb-6">
+                        「陶瓷內膽真的不會留味道，裝完拿鐵洗乾淨再裝水完全沒有怪味。廣口設計也很方便刷洗，非常推薦給上班族！」
+                    </p>
+                    <div class="flex items-center space-x-3 pt-4 border-t border-cream-100">
+                        <div class="w-10 h-10 rounded-full bg-warm-sage/30 text-warm-sage font-bold flex items-center justify-center">陳</div>
+                        <div>
+                            <h5 class="text-sm font-bold text-warm-charcoal">陳先生 (工程師)</h5>
+                            <span class="text-xs text-warm-charcoal/50">購買：鼠尾草綠 800ml</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl border border-cream-200 shadow-sm relative">
+                    <p class="text-sm text-warm-charcoal/80 leading-relaxed mb-6">
+                        「包裝非常精美，打開就像收到禮物一樣開心。送給女朋友當生日禮物，她非常喜歡！質感遠超乎這個價格。」
+                    </p>
+                    <div class="flex items-center space-x-3 pt-4 border-t border-cream-100">
+                        <div class="w-10 h-10 rounded-full bg-warm-amber/30 text-warm-amber font-bold flex items-center justify-center">張</div>
+                        <div>
+                            <h5 class="text-sm font-bold text-warm-charcoal">張先生 (自由工作者)</h5>
+                            <span class="text-xs text-warm-charcoal/50">購買：燕麥奶白 650ml</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Interactive Purchase Section -->
+            <div id="purchase" class="bg-white rounded-3xl border border-cream-200 shadow-2xl overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12">
+                    
+                    <!-- Left Dynamic Product Visual Stage -->
+                    <div class="lg:col-span-6 bg-cream-100 p-8 sm:p-12 flex flex-col items-center justify-center relative">
+                        <span class="absolute top-6 left-6 px-3 py-1 rounded-full bg-warm-terracotta text-white text-xs font-medium">
+                            限時現貨折扣
+                        </span>
+                        
+                        <div class="w-full max-w-xs aspect-square flex items-center justify-center py-6">
+                            <svg id="buy-bottle-svg" width="200" height="340" viewBox="0 0 200 360" fill="none" class="drop-shadow-xl transition-all duration-500">
+                                <path d="M70 30 C70 15, 130 15, 130 30" stroke="#3D312A" stroke-width="8" stroke-linecap="round" fill="none"/>
+                                <rect x="65" y="28" width="70" height="28" rx="6" fill="#3D312A" />
+                                <rect x="70" y="52" width="60" height="8" fill="#EBE3D5" />
+                                <path id="buy-bottle-body" d="M50 75 C50 60, 150 60, 150 75 L155 290 C155 310, 140 325, 120 325 L80 325 C60 325, 45 310, 45 290 Z" fill="#D98A6C" class="transition-colors duration-500"/>
+                                <path d="M60 85 C60 75, 140 75, 140 85 L142 120 C100 130, 70 110, 60 85 Z" fill="white" fill-opacity="0.2"/>
+                                <text x="100" y="200" font-family="'Playfair Display', serif" font-size="14" font-weight="bold" fill="#3D312A" fill-opacity="0.4" text-anchor="middle" letter-spacing="2">HYGGE</text>
+                            </svg>
+                        </div>
+
+                        <div class="text-center mt-4 space-y-1">
+                            <p class="text-xs text-warm-charcoal/60">目前選擇配色：<span id="selected-color-name" class="font-bold text-warm-charcoal">赤陶暖橙</span></p>
+                            <p class="text-[11px] text-warm-terracotta font-medium">✓ 全館免運中 ・ 附贈防刮便攜杯套與專用吸管組</p>
+                        </div>
+                    </div>
+
+                    <!-- Right Interactive Order Form -->
+                    <div class="lg:col-span-6 p-8 sm:p-12 flex flex-col justify-between space-y-8">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-2xl sm:text-3xl font-serif font-bold text-warm-charcoal">Hygge 溫感微光隨行水壺</h3>
+                                <span class="px-2.5 py-1 rounded bg-red-100 text-red-600 font-bold text-xs">85 折優惠</span>
+                            </div>
+                            <p class="text-xs text-warm-charcoal/60 mt-1">簡約磨砂質感 / 316 醫療級不鏽鋼 / 雙層真空保溫</p>
+
+                            <!-- Price Display -->
+                            <div class="mt-6 flex items-baseline space-x-3">
+                                <span class="text-3xl font-bold text-warm-terracotta font-serif" id="product-price">NT$ 980</span>
+                                <span class="text-sm text-warm-charcoal/40 line-through">NT$ 1,280</span>
+                            </div>
+
+                            <!-- Color Selector -->
+                            <div class="mt-6 space-y-2">
+                                <label class="text-xs font-bold text-warm-charcoal uppercase tracking-wider">選取款式顏色</label>
+                                <div class="grid grid-cols-4 gap-3">
+                                    <button onclick="selectPurchaseOption('#D98A6C', '赤陶暖橙')" class="color-btn border-2 border-warm-terracotta p-2 rounded-2xl flex flex-col items-center space-y-1 btn-float">
+                                        <span class="w-6 h-6 rounded-full bg-[#D98A6C]"></span>
+                                        <span class="text-[11px] font-medium text-warm-charcoal">赤陶暖橙</span>
+                                    </button>
+                                    <button onclick="selectPurchaseOption('#8A9A86', '鼠尾草綠')" class="color-btn border-2 border-transparent hover:border-gray-300 p-2 rounded-2xl flex flex-col items-center space-y-1 btn-float">
+                                        <span class="w-6 h-6 rounded-full bg-[#8A9A86]"></span>
+                                        <span class="text-[11px] font-medium text-warm-charcoal">鼠尾草綠</span>
+                                    </button>
+                                    <button onclick="selectPurchaseOption('#EBE3D5', '燕麥奶白')" class="color-btn border-2 border-transparent hover:border-gray-300 p-2 rounded-2xl flex flex-col items-center space-y-1 btn-float">
+                                        <span class="w-6 h-6 rounded-full bg-[#EBE3D5] border border-gray-300"></span>
+                                        <span class="text-[11px] font-medium text-warm-charcoal">燕麥奶白</span>
+                                    </button>
+                                    <button onclick="selectPurchaseOption('#3D312A', '微光炭灰')" class="color-btn border-2 border-transparent hover:border-gray-300 p-2 rounded-2xl flex flex-col items-center space-y-1 btn-float">
+                                        <span class="w-6 h-6 rounded-full bg-[#3D312A]"></span>
+                                        <span class="text-[11px] font-medium text-warm-charcoal">微光炭灰</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Capacity Selector -->
+                            <div class="mt-6 space-y-2">
+                                <label class="text-xs font-bold text-warm-charcoal uppercase tracking-wider">選擇容量規格</label>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <button onclick="selectSize('650ml', 980)" id="size-650" class="size-btn border-2 border-warm-terracotta bg-warm-terracotta/5 p-3 rounded-2xl text-left btn-float">
+                                        <p class="font-bold text-sm text-warm-charcoal">650 ml 日常便攜型</p>
+                                        <p class="text-[11px] text-warm-charcoal/60 mt-0.5">適合通勤、辦公室使用 (約 380g)</p>
+                                    </button>
+                                    <button onclick="selectSize('800ml', 1180)" id="size-800" class="size-btn border-2 border-transparent hover:border-gray-300 bg-gray-50 p-3 rounded-2xl text-left btn-float">
+                                        <p class="font-bold text-sm text-warm-charcoal">800 ml 戶外大容量</p>
+                                        <p class="text-[11px] text-warm-charcoal/60 mt-0.5">適合運動、露營踏青 (約 420g)</p>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Quantity Counter -->
+                            <div class="mt-6 flex items-center justify-between pt-4 border-t border-cream-200">
+                                <span class="text-xs font-bold text-warm-charcoal uppercase">購買數量</span>
+                                <div class="flex items-center space-x-3 bg-cream-100 px-3 py-1.5 rounded-full border border-cream-200">
+                                    <button onclick="updateQty(-1)" class="w-7 h-7 rounded-full bg-white flex items-center justify-center font-bold text-warm-charcoal hover:bg-cream-200">-</button>
+                                    <span id="product-qty" class="font-bold text-sm text-warm-charcoal w-6 text-center">1</span>
+                                    <button onclick="updateQty(1)" class="w-7 h-7 rounded-full bg-white flex items-center justify-center font-bold text-warm-charcoal hover:bg-cream-200">+</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CTA Action Buttons -->
+                        <div class="space-y-3 pt-4">
+                            <button onclick="addToCart()" class="w-full py-4 rounded-full bg-warm-terracotta text-white font-bold hover:bg-warm-terracottaHover btn-float shadow-lg flex items-center justify-center space-x-2 text-base">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                </svg>
+                                <span>加入購物車</span>
+                            </button>
+                            <div class="flex items-center justify-center space-x-6 text-xs text-warm-charcoal/60 pt-2">
+                                <span class="flex items-center"><svg class="w-4 h-4 text-warm-terracotta mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>7天鑑賞期退換無憂</span>
+                                <span class="flex items-center"><svg class="w-4 h-4 text-warm-terracotta mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>原廠 1 年品質保固</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="bg-warm-charcoal text-cream-100 pt-16 pb-12 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 pb-12 border-b border-white/10">
+                <div class="lg:col-span-4 space-y-4">
+                    <a href="#" class="flex items-center space-x-3">
+                        <div class="w-9 h-9 rounded-full bg-warm-terracotta flex items-center justify-center text-white font-bold">H</div>
+                        <span class="font-serif text-2xl font-bold tracking-tight text-white">Hygge<span class="text-warm-terracotta">.</span></span>
+                    </a>
+                    <p class="text-xs text-cream-200/70 leading-relaxed max-w-sm">
+                        Hygge 專注於將日常溫馨感融於器物設計。我們相信，每一個細小的心意，都能讓生活變得更加舒適優雅。
+                    </p>
+                </div>
+
+                <div class="lg:col-span-2 space-y-3">
+                    <h5 class="text-sm font-bold text-white tracking-wider">探索 Hygge</h5>
+                    <ul class="space-y-2 text-xs text-cream-200/70">
+                        <li><a href="#hero" class="hover:text-warm-terracotta transition-colors">品牌首頁</a></li>
+                        <li><a href="#story" class="hover:text-warm-terracotta transition-colors">品牌故事</a></li>
+                        <li><a href="#features" class="hover:text-warm-terracotta transition-colors">極致工藝</a></li>
+                        <li><a href="#scenarios" class="hover:text-warm-terracotta transition-colors">日常提案</a></li>
+                    </ul>
+                </div>
+
+                <div class="lg:col-span-2 space-y-3">
+                    <h5 class="text-sm font-bold text-white tracking-wider">顧客服務</h5>
+                    <ul class="space-y-2 text-xs text-cream-200/70">
+                        <li><a href="#" class="hover:text-warm-terracotta transition-colors">常見問題 FAQ</a></li>
+                        <li><a href="#" class="hover:text-warm-terracotta transition-colors">運送與退換貨說明</a></li>
+                        <li><a href="#" class="hover:text-warm-terracotta transition-colors">保固與維修服務</a></li>
+                        <li><a href="#" class="hover:text-warm-terracotta transition-colors">企業大宗採購</a></li>
+                    </ul>
+                </div>
+
+                <div class="lg:col-span-4 space-y-3">
+                    <h5 class="text-sm font-bold text-white tracking-wider">訂閱溫馨電子報</h5>
+                    <p class="text-xs text-cream-200/70">獲得首購折扣碼、季節限定新品與生活提案。</p>
+                    <form onsubmit="subscribeNewsletter(event)" class="space-y-2">
+                        <div class="flex items-center bg-white/10 rounded-full p-1 border border-white/15 focus-within:border-warm-terracotta">
+                            <input type="email" required placeholder="輸入您的 Email 信箱" class="bg-transparent px-4 py-2 text-xs text-white placeholder-cream-200/40 focus:outline-none w-full">
+                            <button type="submit" class="px-5 py-2 rounded-full bg-warm-terracotta text-white text-xs font-bold hover:bg-warm-terracottaHover transition-colors shrink-0">
+                                訂閱
+                            </button>
+                        </div>
+                        <p id="sub-msg" class="text-[11px] text-warm-terracotta hidden">✓ 感謝訂閱！優惠碼已發送至您的信箱。</p>
+                    </form>
+                </div>
+            </div>
+
+            <div class="pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-cream-200/50 space-y-4 md:space-y-0">
+                <p>© 2026 Hygge Life Studio. All rights reserved.</p>
+                <div class="flex items-center space-x-6">
+                    <a href="#" class="hover:underline">隱私權條款</a>
+                    <a href="#" class="hover:underline">服務條款</a>
+                    <span>安心安全支付認證</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Modal Drawer -->
+    <div id="cart-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeCartModal()"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl p-6 flex flex-col justify-between z-10">
+            <div>
+                <div class="flex items-center justify-between pb-4 border-b border-cream-200">
+                    <h3 class="text-lg font-bold text-warm-charcoal flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-warm-terracotta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                        您的購物車
+                    </h3>
+                    <button onclick="closeCartModal()" class="text-warm-charcoal/50 hover:text-warm-charcoal text-2xl">&times;</button>
+                </div>
+
+                <div id="cart-items" class="py-6 space-y-4">
+                    <p id="empty-cart-msg" class="text-center text-sm text-warm-charcoal/50 py-12">購物車目前是空的，快去選購吧！</p>
+                </div>
+            </div>
+
+            <div id="cart-summary" class="border-t border-cream-200 pt-4 space-y-4 hidden">
+                <div class="flex justify-between text-sm">
+                    <span class="text-warm-charcoal/70">小計</span>
+                    <span id="cart-total" class="font-bold text-warm-charcoal">NT$ 0</span>
+                </div>
+                <button onclick="checkout()" class="w-full py-3.5 rounded-full bg-warm-terracotta text-white font-bold hover:bg-warm-terracottaHover transition-colors text-center block">
+                    前往結帳
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-warm-charcoal text-white px-5 py-3 rounded-2xl shadow-xl z-50 flex items-center space-x-3 transition-all duration-300 transform translate-y-20 opacity-0 pointer-events-none">
+        <span class="text-warm-terracotta font-bold text-lg">✓</span>
+        <span id="toast-msg" class="text-xs font-medium">已成功加入購物車</span>
+    </div>
+
+    <script>
+        // Global Cart State
+        let cart = [];
+        let currentColor = '#D98A6C';
+        let currentColorName = '赤陶暖橙';
+        let currentSize = '650ml';
+        let currentPrice = 980;
+        let currentQty = 1;
+
+        // 1. Change Hero Visual Color
+        function changeHeroColor(color, name) {
+            const heroBody = document.getElementById('hero-bottle-body');
+            if (heroBody) heroBody.setAttribute('fill', color);
+            selectPurchaseOption(color, name);
+        }
+
+        // 2. Select Purchase Option Color
+        function selectPurchaseOption(color, name) {
+            currentColor = color;
+            currentColorName = name;
+            
+            const buyBody = document.getElementById('buy-bottle-body');
+            if (buyBody) buyBody.setAttribute('fill', color);
+
+            const colorNameElem = document.getElementById('selected-color-name');
+            if (colorNameElem) colorNameElem.innerText = name;
+
+            const btns = document.querySelectorAll('.color-btn');
+            btns.forEach(btn => {
+                if (btn.innerText.includes(name)) {
+                    btn.classList.add('border-warm-terracotta');
+                    btn.classList.remove('border-transparent');
+                } else {
+                    btn.classList.remove('border-warm-terracotta');
+                    btn.classList.add('border-transparent');
+                }
+            });
+        }
+
+        // 3. Select Size Option
+        function selectSize(size, price) {
+            currentSize = size;
+            currentPrice = price;
+
+            const priceElem = document.getElementById('product-price');
+            if (priceElem) priceElem.innerText = `NT$ ${price}`;
+
+            const btn650 = document.getElementById('size-650');
+            const btn800 = document.getElementById('size-800');
+
+            if (btn650 && btn800) {
+                if (size === '650ml') {
+                    btn650.className = 'size-btn border-2 border-warm-terracotta bg-warm-terracotta/5 p-3 rounded-2xl text-left btn-float';
+                    btn800.className = 'size-btn border-2 border-transparent hover:border-gray-300 bg-gray-50 p-3 rounded-2xl text-left btn-float';
+                } else {
+                    btn800.className = 'size-btn border-2 border-warm-terracotta bg-warm-terracotta/5 p-3 rounded-2xl text-left btn-float';
+                    btn650.className = 'size-btn border-2 border-transparent hover:border-gray-300 bg-gray-50 p-3 rounded-2xl text-left btn-float';
+                }
+            }
+        }
+
+        // 4. Quantity Adjuster
+        function updateQty(change) {
+            currentQty = Math.max(1, currentQty + change);
+            const qtyElem = document.getElementById('product-qty');
+            if (qtyElem) qtyElem.innerText = currentQty;
+        }
+
+        // 5. Add To Cart Handler
+        function addToCart() {
+            const item = {
+                id: Date.now(),
+                name: 'Hygge 溫感微光隨行水壺',
+                color: currentColorName,
+                colorHex: currentColor,
+                size: currentSize,
+                price: currentPrice,
+                qty: currentQty
+            };
+
+            cart.push(item);
+            updateCartUI();
+            showToast(`已成功加入 ${currentQty} 件商品至購物車！`);
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cart-badge');
+            const cartItems = document.getElementById('cart-items');
+            const emptyMsg = document.getElementById('empty-cart-msg');
+            const summary = document.getElementById('cart-summary');
+            const totalElem = document.getElementById('cart-total');
+
+            const totalCount = cart.reduce((sum, i) => sum + i.qty, 0);
+            if (badge) badge.innerText = totalCount;
+
+            if (cart.length === 0) {
+                if (emptyMsg) emptyMsg.classList.remove('hidden');
+                if (summary) summary.classList.add('hidden');
+                if (cartItems) cartItems.innerHTML = '<p id="empty-cart-msg" class="text-center text-sm text-warm-charcoal/50 py-12">購物車目前是空的，快去選購吧！</p>';
+            } else {
+                if (emptyMsg) emptyMsg.classList.add('hidden');
+                if (summary) summary.classList.remove('hidden');
+
+                let html = '';
+                let grandTotal = 0;
+
+                cart.forEach((item, index) => {
+                    const itemTotal = item.price * item.qty;
+                    grandTotal += itemTotal;
+                    html += `
+                        <div class="flex items-center justify-between p-3 rounded-2xl bg-cream-50 border border-cream-200">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-xl flex items-center justify-center border" style="background-color: ${item.colorHex}">
+                                </div>
+                                <div>
+                                    <h5 class="text-xs font-bold text-warm-charcoal">${item.name}</h5>
+                                    <p class="text-[10px] text-warm-charcoal/60">${item.color} / ${item.size} × ${item.qty}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs font-bold text-warm-terracotta">NT$ ${itemTotal}</p>
+                                <button onclick="removeItem(${index})" class="text-[10px] text-red-400 hover:underline">移除</button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                if (cartItems) cartItems.innerHTML = html;
+                if (totalElem) totalElem.innerText = `NT$ ${grandTotal}`;
+            }
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function openCartModal() {
+            const modal = document.getElementById('cart-modal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeCartModal() {
+            const modal = document.getElementById('cart-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function checkout() {
+            showToast('感謝您的測試下單！此為展示範例網站。');
+            cart = [];
+            updateCartUI();
+            closeCartModal();
+        }
+
+        // 6. Scenario Switcher
+        const scenarioData = {
+            office: {
+                title: "辦公桌上的靈感起點",
+                desc: "忙碌的工作節奏中，讓沉穩的色彩與適溫的水份，帶來一絲從容不迫的安心感。",
+                tag: "靜音質感・極簡隨行",
+                img: "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=1200&q=80"
+            },
+            outdoor: {
+                title: "踏青漫步的輕盈夥伴",
+                desc: "隱藏式軟矽膠提把，輕握即走。在陽光灑落的公園小徑，記錄溫暖的每一刻。",
+                tag: "輕量無負擔・隨手提著走",
+                img: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=1200&q=80"
+            },
+            yoga: {
+                title: "靜心呼吸間的清涼補給",
+                desc: "單手開蓋與直飲設計，練習後的每一口啜飲，都是對身心的溫柔照料。",
+                tag: "單手開蓋・雙飲體驗",
+                img: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1200&q=80"
+            }
+        };
+
+        function switchScenario(key) {
+            const data = scenarioData[key];
+            if (!data) return;
+
+            const imgElem = document.getElementById('scenario-img');
+            const titleElem = document.getElementById('scenario-title');
+            const descElem = document.getElementById('scenario-desc');
+            const tagElem = document.getElementById('scenario-tag');
+
+            if (imgElem) imgElem.src = data.img;
+            if (titleElem) titleElem.innerText = data.title;
+            if (descElem) descElem.innerText = data.desc;
+            if (tagElem) tagElem.innerText = data.tag;
+
+            document.querySelectorAll('.scenario-tab').forEach(tab => {
+                tab.classList.remove('border-warm-terracotta', 'bg-cream-50');
+                tab.classList.add('border-transparent');
+            });
+
+            const activeTab = document.getElementById(`tab-${key}`);
+            if (activeTab) {
+                activeTab.classList.add('border-warm-terracotta', 'bg-cream-50');
+                activeTab.classList.remove('border-transparent');
+            }
+        }
+
+        // 7. Toast Notification Utility
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            if (toastMsg) toastMsg.innerText = msg;
+            
+            if (toast) {
+                toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+                setTimeout(() => {
+                    toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+                }, 3000);
+            }
+        }
+
+        // 8. Newsletter Subscription Handler
+        function subscribeNewsletter(e) {
+            e.preventDefault();
+            const msg = document.getElementById('sub-msg');
+            if (msg) msg.classList.remove('hidden');
+            e.target.reset();
+        }
+
+        // 9. Parallax Scroll Effect & Nav Shadow Listener
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxLayers = document.querySelectorAll('.parallax-layer');
+            
+            parallaxLayers.forEach(layer => {
+                const speed = parseFloat(layer.getAttribute('data-speed')) || 0.1;
+                layer.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+
+            // Safe Nav backdrop effect (Prevents Null Error)
+            const nav = document.getElementById('main-nav');
+            if (nav) {
+                if (scrolled > 50) {
+                    nav.classList.add('shadow-md');
+                } else {
+                    nav.classList.remove('shadow-md');
+                }
+            }
+        });
+
+        // 10. Mobile Menu Toggle Event Listener
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
